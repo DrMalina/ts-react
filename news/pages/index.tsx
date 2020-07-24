@@ -1,9 +1,10 @@
 import React from 'react';
+import { Feed } from '../components/Feed';
 
 export default function Front() {
   return (
-    <>
-      <p>Test</p>
-    </>
+    <div>
+      <Feed />
+    </div>
   );
 }
