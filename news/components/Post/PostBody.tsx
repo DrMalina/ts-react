@@ -1,5 +1,6 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
+import { Breadcrumbs } from '../Breadcrumbs';
 import { Post } from '../../shared/types';
 import { Title, Figure, Content, Meta } from './PostBodyStyle';
 
@@ -7,9 +8,10 @@ interface PostBodyProps {
   post: Post;
 }
 
-export const PostBody: FunctionComponent<PostBodyProps> = ({ post }) => {
+export const PostBody: FC<PostBodyProps> = ({ post }) => {
   return (
     <div>
+      <Breadcrumbs post={post} />
       <Title>{post.title}</Title>
       <Figure>
         <img src={post.image} alt={post.title} />

@@ -13,7 +13,9 @@ export const Feed: FC<FeedProps> = ({ posts, categories }) => {
       {categories.map((currentCategory) => {
         const inSection = posts.filter((post) => post.category === currentCategory);
 
-        return <Section key={currentCategory} title={currentCategory} posts={inSection} />;
+        return (
+          <Section key={currentCategory} title={currentCategory} posts={inSection} isCompact />
+        );
       })}
     </>
   );
