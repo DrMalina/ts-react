@@ -1,31 +1,40 @@
 import React, { FC } from 'react';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { fetchComments } from '../../api/comments';
 import { fetchPost } from '../../api/post';
-import { Post as PostType } from '../../shared/types';
+import { Comments } from '../../components/Comments';
 import { Loader } from '../../components/Loader';
-import { postPaths as paths } from '../../shared/staticPaths';
 import { PostBody } from '../../components/Post/PostBody';
+import { Post as PostType, Comment } from '../../shared/types';
 
 interface PostProps {
   post: PostType;
+  comments: Comment[];
 }
 
-export const getStaticProps: GetStaticProps<PostProps> = async ({ params }) => {
+interface PostProps {
+  post: PostType;
+  comments: Comment[];
+}
+
+export const getServerSideProps: GetServerSideProps<PostProps> = async ({ params }) => {
   if (typeof params.id !== 'string') throw new Error('Unexpected id');
   const post = await fetchPost(params.id);
-  return { props: { post } };
+  const comments = await fetchComments(params.id);
+  return { props: { post, comments } };
 };
 
-export async function getStaticPaths() {
-  return { paths, fallback: true };
-}
-
-const Post: FC<PostProps> = ({ post }) => {
+const Post: FC<PostProps> = ({ post, comments }) => {
   const router = useRouter();
 
   if (router.isFallback) return <Loader />;
-  return <PostBody post={post} />;
+  return (
+    <>
+      <PostBody post={post} />
+      <Comments comments={comments} post={post.id} />
+    </>
+  );
 };
 
 export default Post;
